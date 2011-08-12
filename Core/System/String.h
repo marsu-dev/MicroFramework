@@ -45,6 +45,7 @@ namespace System
 
       operator std::string() const;
       size_t HashCode() const;
+      std::string ToString() const;
 
       String Contat(String right) const ;
       static String Contat(String left, String right);

@@ -44,7 +44,9 @@ namespace System
 
       void Reset();
 
-      virtual size_t HashCode() const;
+      size_t HashCode() const;
+      System::Type& Type() const;
+      std::string ToString() const;
 
       operator bool() const;
 
@@ -58,7 +60,7 @@ namespace System
       T& Get() { return dynamic_cast<T&>(Get()); }
 
       template<class T>
-      const T& Get() const { return dynamic_cast<T&>(Get()); }
+      const T& Get() const { return dynamic_cast<const T&>(Get()); }
 
       template<class T>
       bool IsTypeOf() const { return dynamic_cast<const T*>(&Get())!=NULL; }

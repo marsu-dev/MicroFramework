@@ -54,7 +54,7 @@ namespace System
                void Add(const ObjectRef& object);
                void AddRange(const List& objects);
 
-               System::Object& At(size_t index);
+               const System::Object& At(size_t index) const;
 
                void RemoveAt(size_t index);
                void Clear();
@@ -97,10 +97,15 @@ namespace System
                list.AddRange(coll.list);
             }
 
-            T At(size_t index)
+            T At(size_t index) const
             {
-                ObjectRef& ret(dynamic_cast<ObjectRef&>(list.At(index)));
+                const ObjectRef& ret(dynamic_cast<const ObjectRef&>(list.At(index)));
                 return ret.Get<T>();
+            }
+
+            T operator[](size_t index) const
+            {
+                return At(index);
             }
 
             void RemoveAt(size_t index) { list.RemoveAt(index); }

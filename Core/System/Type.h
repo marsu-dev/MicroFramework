@@ -42,6 +42,8 @@ namespace System
 
       String Name() const { return name; }
 
+      std::string ToString() const;
+
    private:
       String name;
    };

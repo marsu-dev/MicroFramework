@@ -27,13 +27,67 @@
 
 #include <System/SimpleObject.h>
 #include <System/String.h>
+#include <System/Collections/StringCollection.h>
 
 namespace System
 {
    class Console : public SimpleObject
    {
    public:
-      static void Write(String string);
-      static void WriteLine(String string);
+      static void Write(const std::string& string) { Console::Write(String(string)); }
+      static void WriteLine(const std::string& string) { Console::WriteLine(String(string)); }
+
+      static void Write(const String& string) { WriteLine(string, Collections::StringCollection()); }
+      static void WriteLine(const String& string) { WriteLine(string, Collections::StringCollection()); }
+
+      static void Write(const Object& object) { Console::Write(object.ToString()); }
+      static void WriteLine(const Object& object) { Console::WriteLine(object.ToString()); }
+
+      static void Write(const Object& format, const Object& arg1)
+      {
+         Collections::StringCollection args;
+         args.Add(arg1.ToString());
+         Console::Write(String(format.ToString()), args);
+      }
+      static void Write(const Object& format, const Object& arg1, const Object& arg2)
+      {
+         Collections::StringCollection args;
+         args.Add(arg1.ToString());
+         args.Add(arg2.ToString());
+         Console::Write(String(format.ToString()), args);
+      }
+      static void Write(const Object& format, const Object& arg1, const Object& arg2, const Object& arg3)
+      {
+         Collections::StringCollection args;
+         args.Add(arg1.ToString());
+         args.Add(arg2.ToString());
+         args.Add(arg3.ToString());
+         Console::Write(String(format.ToString()), args);
+      }
+
+      static void WriteLine(const Object& format, const Object& arg1)
+      {
+         Collections::StringCollection args;
+         args.Add(arg1.ToString());
+         Console::WriteLine(String(format.ToString()), args);
+      }
+      static void WriteLine(const Object& format, const Object& arg1, const Object& arg2)
+      {
+         Collections::StringCollection args;
+         args.Add(arg1.ToString());
+         args.Add(arg2.ToString());
+         Console::WriteLine(String(format.ToString()), args);
+      }
+      static void WriteLine(const Object& format, const Object& arg1, const Object& arg2, const Object& arg3)
+      {
+         Collections::StringCollection args;
+         args.Add(arg1.ToString());
+         args.Add(arg2.ToString());
+         args.Add(arg3.ToString());
+         Console::WriteLine(String(format.ToString()), args);
+      }
+
+      static void Write(const String& format, const Collections::StringCollection& args);
+      static void WriteLine(const String& format, const Collections::StringCollection& args);
    };
 }

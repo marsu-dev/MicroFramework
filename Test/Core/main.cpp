@@ -100,8 +100,10 @@ typedef std::vector<NameValue> NameValueCollection;
 static int TypeTest()
 {
    std::cout << "Type Test" << std::endl;
-   Console::WriteLine(String().Type().Name());
-   Console::WriteLine(Type::Get<String>().Name());
+   Console::WriteLine("Hello");
+   Console::WriteLine(String("Hello, "), String("World!"));
+   Console::WriteLine(String().Type());
+   Console::WriteLine(Type::Get<String>());
    return 0;
 }
 

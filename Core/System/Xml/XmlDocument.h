@@ -45,7 +45,7 @@ namespace System
          void LoadFile(String fileName);
          void LoadXml(String xml);
 
-         String ToString() const;
+         std::string ToString() const;
 
       private:
          Pimpl* p;

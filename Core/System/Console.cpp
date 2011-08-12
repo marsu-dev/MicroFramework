@@ -24,6 +24,7 @@
  */
 
 #include <System/Console.h>
+#include <System/Exception.h>
 #include <System/Threading/Synchro.h>
 
 #include <iostream>
@@ -43,14 +44,21 @@ namespace System
 using namespace System;
 using namespace System::Threading;
 
-void Console::Write(String string)
+void Console::Write(const String& format, const Collections::StringCollection& args)
 {
    Locker lock(Private::SyncRoot());
-   std::cout << (std::string)string;
+   std::cout << (std::string)format;
+   // TODO: manage format string and args
+   for(size_t i=0; i<args.Count(); i++)
+      std::cout << (std::string)args[i];
 }
 
-void Console::WriteLine(String string)
+void Console::WriteLine(const String& format, const Collections::StringCollection& args)
 {
    Locker lock(Private::SyncRoot());
-   std::cout << (std::string)string << std::endl;
+   std::cout << (std::string)format;
+   // TODO: manage format string and args
+   for(size_t i=0; i<args.Count(); i++)
+      std::cout << (std::string)args[i];
+   std::cout << std::endl;
 }

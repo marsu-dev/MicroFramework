@@ -132,6 +132,24 @@ size_t ObjectRef::HashCode() const
    return p->object->HashCode();
 }
 
+System::Type& ObjectRef::Type() const
+{
+   PIMPL
+   if(!p->object)
+      return Object::Type();
+
+   return p->object->Type();
+}
+
+std::string ObjectRef::ToString() const
+{
+   PIMPL
+   if(!p->object)
+      return Object::ToString();
+
+   return p->object->ToString();
+}
+
 void ObjectRef::Reset()
 {
    PIMPL

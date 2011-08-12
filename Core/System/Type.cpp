@@ -70,3 +70,15 @@ Type& Object::Type() const
 {
    return Type::FromObject(*this);
 }
+
+std::string Type::ToString() const
+{
+   return name;
+}
+
+std::string Object::ToString() const
+{
+   const System::Type type(Type::FromObject(*this));
+
+   return type.ToString();
+}

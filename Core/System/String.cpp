@@ -231,10 +231,21 @@ String& String::operator =(const String& src)
    return *this;
 }
 
+String::operator std::string() const
+{
+   return ToString();
+}
+
 size_t String::HashCode() const
 {
    PIMPL
    return (size_t)p;
+}
+
+std::string String::ToString() const
+{
+   PIMPL
+   return p->string;
 }
 
 bool String::operator ==(const String comp) const
@@ -246,12 +257,6 @@ const String String::Empty()
 {
    static String empty(std::string(""));
    return empty;
-}
-
-String::operator std::string() const
-{
-   PIMPL
-   return p->string;
 }
 
 String String::Contat(String right) const
