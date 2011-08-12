@@ -23,17 +23,50 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include <System/Object.h>
 #include <System/Type.h>
-#include <System/ObjectRef.h>
-#include <System/ObjectValue.h>
-#include <System/CopyableRef.h>
-#include <System/HashCodeHandler.h>
+#include <System/Threading/Locker.h>
+#include <System/Threading/Mutex.h>
 
-#include <System/Console.h>
-#include <System/String.h>
-#include <System/NameValue.h>
-#include <System/Exception.h>
-#include <System/Events.h>
+#include <map>
+#include <string>
+
+using namespace System;
+
+#if defined(_MSC_VER)
+   #define RealName(name) name
+#else
+   // http://stackoverflow.com/questions/789402/typeid-returns-extra-characters-in-g
+   #include <cxxabi.h>
+   static std::string RealName(const std::string& name)
+   {
+      std::string ret;
+      int status;
+      char *realname = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
+      ret = realname;
+      free(realname);
+
+      return ret;
+   }
+#endif
+
+Type& Type::FromObject(const Object& object)
+{
+   static Threading::Mutex mutex;
+   Threading::Locker lock(mutex);
+
+   typedef std::map<size_t, System::Type> TypeMap;
+   static TypeMap typeMap;
+
+   const String typeName(RealName(typeid(object).name()));
+
+   const size_t code(typeName.HashCode());
+   if(typeMap.find(code)==typeMap.end())
+      typeMap.insert(std::make_pair(code, Type(typeName)));
+
+   return typeMap[code];
+}
+
+Type& Object::Type() const
+{
+   return Type::FromObject(*this);
+}

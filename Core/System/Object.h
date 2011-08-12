@@ -29,12 +29,15 @@
 
 namespace System
 {
+   class Type;
+
    class Object
    {
    public:
       virtual ~Object() {};
 
       virtual size_t HashCode() const = 0;
+      virtual System::Type& Type() const;
    };
 
    class Pimpl
