@@ -66,6 +66,7 @@ public:
 
 };
 
+static int TypeTest();
 static int CollectionTest();
 static int SrtingTest();
 static int XmlTest();
@@ -80,6 +81,7 @@ int main(int argc, char* argv[])
 {
    try
    {
+      TypeTest();
       CollectionTest();
       SrtingTest();
       XmlTest();
@@ -94,6 +96,13 @@ int main(int argc, char* argv[])
 
 typedef std::vector<String> StringCollection;
 typedef std::vector<NameValue> NameValueCollection;
+
+static int TypeTest()
+{
+   std::cout << "Type Test" << std::endl;
+   Console::WriteLine(String().Type().Name());
+   return 0;
+}
 
 static int CollectionTest()
 {

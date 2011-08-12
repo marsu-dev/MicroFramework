@@ -36,7 +36,7 @@ namespace System
       Type() {}
       Type(String name) : name(name) {}
 
-      static Type& FromObject(Object& object);
+      static Type& FromObject(const Object& object);
 
       String Name() const { return name; }
 

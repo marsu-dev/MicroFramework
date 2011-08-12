@@ -49,7 +49,7 @@ using namespace System;
    }
 #endif
 
-Type& Type::FromObject(Object& object)
+Type& Type::FromObject(const Object& object)
 {
    static Threading::Mutex mutex;
    Threading::Locker lock(mutex);
@@ -64,4 +64,9 @@ Type& Type::FromObject(Object& object)
       typeMap.insert(std::make_pair(code, Type(typeName)));
 
    return typeMap[code];
+}
+
+Type& Object::Type() const
+{
+   return Type::FromObject(*this);
 }
