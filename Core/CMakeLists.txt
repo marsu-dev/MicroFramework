@@ -9,5 +9,6 @@ file(GLOB_RECURSE MicroFrameworkCoreSources "System/*.cpp" "System/*.h")
 
 include_directories ( $(MicroFramework_SOURCE_DIR) ) 
 include_directories ( ${Boost_INCLUDE_DIRS} )
+include_directories ( ${pugixml_SOURCE_DIR}/src )
 
 add_library ( MicroFramework.Core  ${MicroFrameworkCoreSources} )
