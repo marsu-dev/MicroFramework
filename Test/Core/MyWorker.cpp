@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -34,13 +34,13 @@
 using namespace System;
 using namespace System::Threading;
 
-static boost::mt19937 rng; 
+static boost::mt19937 rng;
 
 void MyWorker::Run()
 {
    boost::uniform_int<> TimeRand(20,100);
    boost::uniform_int<> CountRand(1,2);
-   
+
    std::ostringstream oss;
 
    const int nb = CountRand(rng);
@@ -50,8 +50,8 @@ void MyWorker::Run()
 
       oss << time;
       if(i<(nb-1))
-         oss << " "; 
-      
+         oss << " ";
+
       Thread::Sleep(time);
       Thread::Yield();
    }

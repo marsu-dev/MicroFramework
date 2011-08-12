@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -61,7 +61,7 @@ public:
       std::cerr << "Worker Done:" << std::endl;
       std::cerr << (std::string)(myWorker.result) << std::endl;
    }
-   
+
    void operator()(MyWorker& myWorker) { OnWorkFinished(myWorker); }
 
 };
@@ -139,7 +139,7 @@ static int SrtingTest()
 static int XmlTest()
 {
    Xml::XmlDocument doc;
-   
+
    doc.LoadFile(String("../pugixml/tests/data/small.xml"));
    Console::WriteLine(doc.ToString());
 
@@ -155,7 +155,7 @@ public:
    {
       Print(worker);
    }
-   
+
    void OnWorker(MyWorker& worker)
    {
       Print(worker);
@@ -179,12 +179,12 @@ public:
    {
       workers.ForEach(*this);
    }
-   
+
    void operator()(MyWorker& worker)
    {
       std::cout << "*";
    }
-   
+
    static void ForEach(System::Collections::Generic::List<MyWorker>& workers)
    {
       WorkerIterator it(workers);
@@ -229,7 +229,7 @@ static int ThreadTest()
    std::cerr << "Delegate bind wrapper: " << std::endl;
    System::Collections::ForEachWrap(workerList, workerDelegate, &WorkerDelegate::OnWorker);
    std::cerr << std::endl;
-   
+
    std::cerr << "Foreach iterator: " << std::endl;
    MyWorkerIterator::ForEach(workerList, workerDelegate, &WorkerDelegate::OnWorker);
    MyWorkerIterator it(workerList);

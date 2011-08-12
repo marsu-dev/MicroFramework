@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -76,7 +76,7 @@ namespace System
          {
          public:
             size_t HashCode() const { return list.HashCode(); }
-            
+
             bool Empty() const
             {
                return list.Empty();
@@ -87,26 +87,26 @@ namespace System
                return list.Count();
             }
 
-            void Add(const T& t) 
-            { 
+            void Add(const T& t)
+            {
                list.Add(ObjectRef::Create(t));
             }
 
-            void AddRange(const List<T>& coll) 
-            { 
+            void AddRange(const List<T>& coll)
+            {
                list.AddRange(coll.list);
             }
 
-            T At(size_t index) 
+            T At(size_t index)
             {
                 ObjectRef& ret(dynamic_cast<ObjectRef&>(list.At(index)));
                 return ret.Get<T>();
             }
 
             void RemoveAt(size_t index) { list.RemoveAt(index); }
-            
+
             void Clear() { list.Clear(); }
-            
+
             void Reverse() { list.Reverse(); }
 
             std::vector<T> ToArray() const
@@ -136,7 +136,7 @@ namespace System
             {
                list.ForEach(delegate);
             }
-            
+
          private:
             Detail::List list;
             template<class F>

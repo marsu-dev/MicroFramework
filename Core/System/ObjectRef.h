@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -48,10 +48,10 @@ namespace System
 
       operator bool() const;
 
-      Object& Get(); 
+      Object& Get();
       const Object& Get() const;
 
-      operator Object& () { return Get(); } 
+      operator Object& () { return Get(); }
       operator const Object& () const { return Get(); }
 
       template<class T>
