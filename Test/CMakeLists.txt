@@ -9,4 +9,4 @@ include_directories ( ${MicroFramework.Core_SOURCE_DIR} )
 file( GLOB_RECURSE CoreTestSources "Core/*.cpp" "Core/*.h" )
 
 add_executable ( CoreTest ${CoreTestSources} )
-target_link_libraries ( CoreTest MicroFramework.Core ${Boost_LIBRARIES} )
+target_link_libraries ( CoreTest MicroFramework.Core ${Boost_LIBRARIES}  pugixml )

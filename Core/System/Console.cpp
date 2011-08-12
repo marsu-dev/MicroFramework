@@ -23,16 +23,34 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include <System/Object.h>
-#include <System/ObjectRef.h>
-#include <System/ObjectValue.h>
-#include <System/CopyableRef.h>
-#include <System/HashCodeHandler.h>
-
 #include <System/Console.h>
-#include <System/String.h>
-#include <System/NameValue.h>
-#include <System/Exception.h>
-#include <System/Events.h>
+#include <System/Threading/Synchro.h>
+
+#include <iostream>
+
+namespace System
+{
+   namespace Private
+   {
+      Threading::Synchro SyncRoot()
+      {
+         static Threading::Synchro syncRoot;
+         return syncRoot;
+      }
+   }
+}
+
+using namespace System;
+using namespace System::Threading;
+
+void Console::Write(String string)
+{
+   Locker lock(Private::SyncRoot());
+   std::cout << (std::string)string;
+}
+
+void Console::WriteLine(String string)
+{
+   Locker lock(Private::SyncRoot());
+   std::cout << (std::string)string << std::endl;
+}

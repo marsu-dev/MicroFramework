@@ -25,14 +25,15 @@
 
 #pragma once
 
-#include <System/Object.h>
-#include <System/ObjectRef.h>
-#include <System/ObjectValue.h>
-#include <System/CopyableRef.h>
-#include <System/HashCodeHandler.h>
-
-#include <System/Console.h>
+#include <System/SimpleObject.h>
 #include <System/String.h>
-#include <System/NameValue.h>
-#include <System/Exception.h>
-#include <System/Events.h>
+
+namespace System
+{
+   class Console : public SimpleObject
+   {
+   public:
+      static void Write(String string);
+      static void WriteLine(String string);
+   };
+}
