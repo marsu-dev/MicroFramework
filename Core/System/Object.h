@@ -26,6 +26,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
 
 namespace System
 {
@@ -38,6 +39,7 @@ namespace System
 
       virtual size_t HashCode() const = 0;
       virtual System::Type& Type() const;
+      virtual std::string ToString() const;
    };
 
    class Pimpl

@@ -47,4 +47,5 @@ namespace System
    class ObjectPresentException : public Exception {};
    class ObjectNotFoundException : public Exception {};
    class OutOfBoundException : public Exception {};
+   class NotImplementedException : public Exception {};
 }

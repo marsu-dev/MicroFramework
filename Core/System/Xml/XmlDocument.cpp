@@ -172,7 +172,7 @@ void XmlDocument::LoadXml(String xml)
    p->LoadXml(xml);
 }
 
-String XmlDocument::ToString() const
+std::string XmlDocument::ToString() const
 {
    PIMPL
    return String(p->ToString());

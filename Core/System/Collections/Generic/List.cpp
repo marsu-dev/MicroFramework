@@ -86,7 +86,7 @@ namespace System
                      }
                   }
 
-                  System::Object& At(size_t index)
+                  const System::Object& At(size_t index)
                   {
                      if(index>=objects.size())
                         throw OutOfBoundException();
@@ -219,7 +219,7 @@ void List::AddRange(const List& objects)
    p->AddRange(objects);
 }
 
-System::Object& List::At(size_t index)
+const System::Object& List::At(size_t index) const
 {
    PIMPL
    return p->At(index);

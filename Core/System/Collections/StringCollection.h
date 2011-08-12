@@ -32,6 +32,13 @@ namespace System
 {
    namespace Collections
    {
-      class StringCollection : public Generic::List<String> {};
+      class StringCollection : public Generic::List<String>
+      {
+      public:
+         void Add(const std::string& string)
+         {
+            Generic::List<String>::Add(String(string));
+         }
+      };
    }
 }
