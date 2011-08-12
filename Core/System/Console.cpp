@@ -23,28 +23,34 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+#include <System/Console.h>
+#include <System/Threading/Synchro.h>
 
-#include <System/SimpleObject.h>
-#include <System/String.h>
+#include <iostream>
 
 namespace System
 {
-   class Exception : public SimpleObject
+   namespace Private
    {
-   public:
-      Exception() {}
-      Exception(String message) : message(message) {}
+      Threading::Synchro SyncRoot()
+      {
+         static Threading::Synchro syncRoot;
+         return syncRoot;
+      }
+   }
+}
 
-      virtual String What() const { return message; }
+using namespace System;
+using namespace System::Threading;
 
-   private:
-      String message;
-   };
+void Console::Write(String string)
+{
+   Locker lock(Private::SyncRoot());
+   std::cout << (std::string)string;
+}
 
-   class NullPointerException : public Exception {};
-   class FileNotFoundException : public Exception {};
-   class ObjectPresentException : public Exception {};
-   class ObjectNotFoundException : public Exception {};
-   class OutOfBoundException : public Exception {};
+void Console::WriteLine(String string)
+{
+   Locker lock(Private::SyncRoot());
+   std::cout << (std::string)string << std::endl;
 }

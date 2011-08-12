@@ -31,6 +31,7 @@
 #include <System/CopyableRef.h>
 #include <System/HashCodeHandler.h>
 
+#include <System/Console.h>
 #include <System/String.h>
 #include <System/NameValue.h>
 #include <System/Exception.h>

@@ -31,6 +31,7 @@
 #include <System/Data.h>
 #include <System/Threading.h>
 #include <System/Collections.h>
+#include <System/Xml/XmlDocument.h>
 
 #include "MyWorker.h"
 
@@ -65,8 +66,9 @@ public:
 
 };
 
-static int SrtingTest();
 static int CollectionTest();
+static int SrtingTest();
+static int XmlTest();
 static int ThreadTest();
 #include <set>
 #include <list>
@@ -80,6 +82,7 @@ int main(int argc, char* argv[])
    {
       CollectionTest();
       SrtingTest();
+      XmlTest();
       ThreadTest();
    }
    catch(std::exception& e)
@@ -130,6 +133,15 @@ static int SrtingTest()
 
       //std::cout << strings.back().HashCode() << std::endl;
    }
+   return 0;
+}
+
+static int XmlTest()
+{
+   Xml::XmlDocument doc;
+   
+   doc.LoadFile(String("../pugixml/tests/data/small.xml"));
+   Console::WriteLine(doc.ToString());
 
    return 0;
 }

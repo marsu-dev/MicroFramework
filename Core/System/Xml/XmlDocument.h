@@ -25,26 +25,30 @@
 
 #pragma once
 
-#include <System/SimpleObject.h>
+#include <System/Object.h>
 #include <System/String.h>
 
 namespace System
 {
-   class Exception : public SimpleObject
+   namespace Xml
    {
-   public:
-      Exception() {}
-      Exception(String message) : message(message) {}
+      class XmlDocument : public Object
+      {
+      public:
+         XmlDocument();
+         virtual ~XmlDocument();
+         XmlDocument(const XmlDocument& src);
+         XmlDocument& operator =(const XmlDocument& src);
 
-      virtual String What() const { return message; }
+         size_t HashCode() const;
 
-   private:
-      String message;
-   };
+         void LoadFile(String fileName);
+         void LoadXml(String xml);
 
-   class NullPointerException : public Exception {};
-   class FileNotFoundException : public Exception {};
-   class ObjectPresentException : public Exception {};
-   class ObjectNotFoundException : public Exception {};
-   class OutOfBoundException : public Exception {};
+         String ToString() const;
+
+      private:
+         Pimpl* p;
+      };
+   }
 }

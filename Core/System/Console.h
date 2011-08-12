@@ -30,21 +30,10 @@
 
 namespace System
 {
-   class Exception : public SimpleObject
+   class Console : public SimpleObject
    {
    public:
-      Exception() {}
-      Exception(String message) : message(message) {}
-
-      virtual String What() const { return message; }
-
-   private:
-      String message;
+      static void Write(String string);
+      static void WriteLine(String string);
    };
-
-   class NullPointerException : public Exception {};
-   class FileNotFoundException : public Exception {};
-   class ObjectPresentException : public Exception {};
-   class ObjectNotFoundException : public Exception {};
-   class OutOfBoundException : public Exception {};
 }
