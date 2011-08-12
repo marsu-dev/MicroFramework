@@ -25,15 +25,22 @@
 
 #pragma once
 
-#include <System/Object.h>
-#include <System/Type.h>
-#include <System/ObjectRef.h>
-#include <System/ObjectValue.h>
-#include <System/CopyableRef.h>
-#include <System/HashCodeHandler.h>
-
-#include <System/Console.h>
+#include <System/SimpleObject.h>
 #include <System/String.h>
-#include <System/NameValue.h>
-#include <System/Exception.h>
-#include <System/Events.h>
+
+namespace System
+{
+   class Type : public SimpleObject
+   {
+   public:
+      Type() {}
+      Type(String name) : name(name) {}
+
+      static Type& FromObject(Object& object);
+
+      String Name() const { return name; }
+
+   private:
+      String name;
+   };
+}
