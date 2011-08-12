@@ -37,6 +37,8 @@ namespace System
       Type(String name) : name(name) {}
 
       static Type& FromObject(const Object& object);
+      template<class T>
+      static Type& Get() { T t; return FromObject(t); }
 
       String Name() const { return name; }
 

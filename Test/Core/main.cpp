@@ -101,6 +101,7 @@ static int TypeTest()
 {
    std::cout << "Type Test" << std::endl;
    Console::WriteLine(String().Type().Name());
+   Console::WriteLine(Type::Get<String>().Name());
    return 0;
 }
 
