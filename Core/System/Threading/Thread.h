@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -48,26 +48,26 @@ namespace System
          void Start(SyncRunner runner);
          void Start(Runner runner);
 
-         template<class T> 
+         template<class T>
          void Start(ResetEvent sync)
          {
             Start(SyncRunner::Create<T>(sync));
          }
 
-         template<class T> 
+         template<class T>
          void Start()
          {
             Start(Runner::Create<T>());
          }
 
-         template<class T> 
+         template<class T>
          static Thread CreateAndStart(ResetEvent sync)
          {
             Thread thread;
             thread.Start<T>(sync);
             return thread;
          }
-         template<class T> 
+         template<class T>
          static Thread CreateAndStart()
          {
             Thread thread;

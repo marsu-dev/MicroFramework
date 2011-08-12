@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -44,7 +44,7 @@ namespace System
          {
          public:
             XmlDocument()
-               : referenceCount(0) 
+               : referenceCount(0)
             {}
 
             size_t ReferenceCount() const;
@@ -53,7 +53,7 @@ namespace System
             {
                std::ifstream stream;
                stream.open(xmlFile.c_str(), std::ios::in);
-               if(!stream.is_open()) 
+               if(!stream.is_open())
                   throw FileNotFoundException();
                Load(stream);
             }
@@ -150,7 +150,7 @@ XmlDocument& XmlDocument::operator =(const XmlDocument& src)
    this->p = src.p;
    PIMPL
    p->referenceCount++;
-   
+
    return *this;
 }
 

@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -38,22 +38,22 @@ namespace System
       virtual ~String();
       String(const String& src);
       String& operator =(const String& src);
-      
+
       bool operator ==(const String comp) const;
 
       static const String Empty();
 
       operator std::string() const;
       size_t HashCode() const;
-      
+
       String Contat(String right) const ;
       static String Contat(String left, String right);
-      
+
       // TODO
       // String Trim(String chars) const;
       // String TrimLeft(String chars) const;
       // String TrimRight(String chars) const;
-      // StringCollection Split(String chars) const; 
+      // StringCollection Split(String chars) const;
       // String Replace(String oldStr, String newStr) const;
       // String Remove(String str) const { return Replace(str, Emtpy()); }
 
