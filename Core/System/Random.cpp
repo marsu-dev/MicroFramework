@@ -37,6 +37,8 @@ namespace System
 {
    namespace Private
    {
+      byte_array& BufferInternalField(const System::Buffer& buffer);
+
       class Random : public System::Pimpl
       {
       public:
@@ -46,6 +48,7 @@ namespace System
             , rng()
             , randInt(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())
             , randDouble()
+            , randBytes(0x00, 0xFF)
          {}
 
          Random(int min, int max)
@@ -54,6 +57,7 @@ namespace System
             , rng()
             , randInt(std::min(min, max), std::max(min,max))
             , randDouble()
+            , randBytes(0x00, 0xFF)
          {}
 
          size_t ReferenceCount() const;
@@ -69,6 +73,14 @@ namespace System
             Threading::Locker lock(syncRoot);
             return randDouble(rng);
          }
+         void NextBytes(Buffer& buffer)
+         {
+            Threading::Locker lock(syncRoot);
+            byte_array& bytes(BufferInternalField(buffer));
+            byte_array::iterator it(bytes.begin());
+            while(it!=bytes.end())
+               *it++ = (byte)randBytes(rng);
+         }
 
          int referenceCount;
          Threading::Synchro syncRoot;
@@ -76,6 +88,7 @@ namespace System
          boost::mt19937 rng;
          boost::uniform_int<> randInt;
          boost::uniform_01<> randDouble;
+         boost::uniform_int<> randBytes;
       };
    }
 }
@@ -164,4 +177,18 @@ double Random::NextDouble() const
 {
    PIMPL
    return p->NextDouble();
+}
+
+void Random::NextBytes(Buffer buffer) const
+{
+   PIMPL
+   p->NextBytes(buffer);
+}
+
+System::Buffer Random::NextBytes(size_t size) const
+{
+   System::Buffer buffer;
+   buffer.Resize(size);
+   NextBytes(buffer);
+   return buffer;
 }
