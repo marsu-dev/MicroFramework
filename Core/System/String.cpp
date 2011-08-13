@@ -64,6 +64,12 @@ namespace System
          typedef boost::shared_ptr<Collection> CollectionPtr;
          typedef std::map<hash_t, CollectionPtr> Map;
       };
+
+      std::string& StringInternalField(const System::String& string)
+      {
+         Private::String& p(*reinterpret_cast<Private::String*>(string.HashCode()));
+         return p.string;
+      }
    }
 
    class StringFactory : public SimpleObject
