@@ -27,17 +27,29 @@
 
 #include <System/Object.h>
 
+#include <vector>
+
 namespace System
 {
+   typedef unsigned char byte;
+   typedef std::vector<byte> byte_array;
+
    class Buffer : public Object
    {
    public:
       Buffer();
+      Buffer(const byte_array& bytes);
       virtual ~Buffer();
       Buffer(const Buffer& src);
       Buffer& operator =(const Buffer& src);
 
       size_t HashCode() const;
+
+      void Resize(size_t size);
+      size_t Size() const;
+
+      void Import(const byte_array& bytes);
+      byte_array ToArray() const;
 
    private:
       Pimpl* p;

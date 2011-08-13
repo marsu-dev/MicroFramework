@@ -24,6 +24,7 @@
  */
 
 #include <System/Buffer.h>
+#include <System/Threading/Synchro.h>
 
 #include <boost/thread/mutex.hpp>
 typedef boost::lock_guard<boost::mutex> lock_t;
@@ -38,10 +39,40 @@ namespace System
          Buffer()
             : referenceCount(0)
          {}
+         Buffer(const byte_array& bytes)
+            : referenceCount(0)
+            , bytes(bytes)
+         {}
 
          size_t ReferenceCount() const;
 
+         void Resize(size_t size)
+         {
+            Threading::Locker lock(syncRoot);
+            bytes.resize(size);
+         }
+
+         size_t Size() const
+         {
+            Threading::Locker lock(syncRoot);
+            return bytes.size();
+         }
+
+         void Import(const byte_array& bytes)
+         {
+            Threading::Locker lock(syncRoot);
+            this->bytes = bytes;
+         }
+
+         byte_array& ToArray()
+         {
+            Threading::Locker lock(syncRoot);
+            return bytes;
+         }
+
          int referenceCount;
+         Threading::Synchro syncRoot;
+         byte_array bytes;
       };
    }
 }
@@ -63,6 +94,14 @@ size_t Private::Buffer::ReferenceCount() const
 
 Buffer::Buffer()
   : p(new Private::Buffer)
+{
+   LOCK
+   PIMPL
+   p->referenceCount++;
+}
+
+Buffer::Buffer(const byte_array& bytes)
+  : p(new Private::Buffer(bytes))
 {
    LOCK
    PIMPL
@@ -110,4 +149,28 @@ size_t Buffer::HashCode() const
 {
    PIMPL
    return (size_t)p;
+}
+
+void Buffer::Resize(size_t size)
+{
+   PIMPL
+   p->Resize(size);
+}
+
+size_t Buffer::Size() const
+{
+   PIMPL
+   return p->Size();
+}
+
+void Buffer::Import(const byte_array& bytes)
+{
+   PIMPL
+   p->Import(bytes);
+}
+
+byte_array Buffer::ToArray() const
+{
+   PIMPL
+   return p->ToArray();
 }
