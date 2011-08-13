@@ -23,36 +23,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "MyWorker.h"
-#include <System/Threading/Thread.h>
-#include <System/Threading/Locker.h>
-#include <System/Random.h>
+#pragma once
 
-#include <iostream>
-#include <sstream>
+#include <System/Object.h>
 
-using namespace System;
-using namespace System::Threading;
-
-void MyWorker::Run()
+namespace System
 {
-   static Random random(20,100);
-
-   std::ostringstream oss;
-
-   const int nb = 1 + random.Next()%2;
-   for(int i=0; i< nb; i++)
+   class Random : public Object
    {
-      int time = random.Next();
+   public:
+      Random();
+      Random(int min, int max);
+      virtual ~Random();
+      Random(const Random& src);
+      Random& operator =(const Random& src);
 
-      oss << time;
-      if(i<(nb-1))
-         oss << " ";
+      size_t HashCode() const;
 
-      Thread::Sleep(time);
-      Thread::Yield();
-   }
+      int Next() const;
+      double NextDouble() const;
 
-   result = String(oss.str());
-   NotifyWorkFinished();
+   private:
+      Pimpl* p;
+   };
 }
