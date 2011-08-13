@@ -46,6 +46,12 @@ namespace System
             int referenceCount;
             boost::mutex mutex;
          };
+
+         boost::mutex& MutexInternalField(const Threading::Mutex& mutex)
+         {
+            Private::Mutex& p(*reinterpret_cast<Private::Mutex*>(mutex.HashCode()));
+            return p.mutex;
+         }
       }
    }
 }

@@ -41,14 +41,7 @@ namespace System
    {
       namespace Private
       {
-         class Mutex : public System::Pimpl
-         {
-         public:
-            size_t ReferenceCount() const { return 0; }
-
-            int referencecount;
-            boost::mutex mutex;
-         };
+         boost::mutex& MutexInternalField(const Threading::Mutex& mutex);
 
          class Locker : public System::Pimpl
          {
@@ -61,8 +54,8 @@ namespace System
 
             void Lock(System::Threading::Mutex& mutex)
             {
-               Private::Mutex* mtx = reinterpret_cast<Private::Mutex*>(mutex.HashCode());
-               locker.reset(new lock_t(mtx->mutex));
+               boost::mutex& mtx(MutexInternalField(mutex));
+               locker.reset(new lock_t(mtx));
             }
 
             void Unlock()
