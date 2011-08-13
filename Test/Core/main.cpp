@@ -101,6 +101,12 @@ static int TypeTest()
 {
    std::cout << "Type Test" << std::endl;
    Console::WriteLine("Hello");
+   Console::WriteLine(Guid::Empty());
+   Console::WriteLine(Guid::New());
+   Console::WriteLine(Guid::Parse(Guid::New().ToString()));
+   std::cout << "Guid Equals? " << (Guid::Empty()==Guid::Empty()) << std::endl;
+
+
    Console::WriteLine(String("Hello, "), String("World!"));
    Console::WriteLine(String().Type());
    Console::WriteLine(Type::Get<String>());

@@ -23,34 +23,32 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "MyWorker.h"
-#include <System.h>
+#pragma once
 
-#include <iostream>
-#include <sstream>
+#include <System/Object.h>
+#include <System/String.h>
 
-using namespace System;
-using namespace System::Threading;
-
-void MyWorker::Run()
+namespace System
 {
-   static Random random(20,100);
-
-   std::ostringstream oss;
-
-   const int nb = 1 + random.Next()%2;
-   for(int i=0; i< nb; i++)
+   class Guid : public Object
    {
-      int time = random.Next();
+   public:
+      static Guid Parse(String string);
+      static Guid New();
+      static Guid Empty();
 
-      oss << time;
-      if(i<(nb-1))
-         oss << " ";
+      Guid();
+      Guid(String string);
+      virtual ~Guid();
+      Guid(const Guid& src);
+      Guid& operator =(const Guid& src);
 
-      Thread::Sleep(time);
-      Thread::Yield();
-   }
+      size_t HashCode() const;
+      std::string ToString() const;
 
-   result = String(oss.str());
-   NotifyWorkFinished();
+      bool operator ==(const Guid comp) const;
+
+   private:
+      Pimpl* p;
+   };
 }
