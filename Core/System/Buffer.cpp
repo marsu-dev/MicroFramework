@@ -74,6 +74,12 @@ namespace System
          Threading::Synchro syncRoot;
          byte_array bytes;
       };
+
+      byte_array& BufferInternalField(const System::Buffer& buffer)
+      {
+         Private::Buffer& p(*reinterpret_cast<Private::Buffer*>(buffer.HashCode()));
+         return p.bytes;
+      }
    }
 }
 
