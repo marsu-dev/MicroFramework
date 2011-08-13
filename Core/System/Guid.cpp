@@ -23,12 +23,16 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <System/Random.h>
-#include <System/Threading/Synchro.h>
+#include <System/Guid.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/nil_generator.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/string_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
-#include <boost/random.hpp>
-#include <cmath>
-#include <limits>
+#include <vector>
+#include <sstream>
+
 
 #include <boost/thread/mutex.hpp>
 typedef boost::lock_guard<boost::mutex> lock_t;
@@ -37,45 +41,41 @@ namespace System
 {
    namespace Private
    {
-      class Random : public System::Pimpl
+      class Guid : public System::Pimpl
       {
       public:
-         Random()
+         Guid()
             : referenceCount(0)
-            , syncRoot()
-            , rng()
-            , randInt(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())
-            , randDouble()
+            , guid(boost::uuids::nil_generator()())
          {}
 
-         Random(int min, int max)
+         Guid(const std::string& string)
             : referenceCount(0)
-            , syncRoot()
-            , rng()
-            , randInt(std::min(min, max), std::max(min,max))
-            , randDouble()
+            , guid(boost::uuids::string_generator()(string))
          {}
 
          size_t ReferenceCount() const;
 
-         int Next()
+         void Random()
          {
-            Threading::Locker lock(syncRoot);
-            return randInt(rng);
+            guid = boost::uuids::random_generator()();
          }
 
-         double NextDouble()
+         std::string ToString()
          {
-            Threading::Locker lock(syncRoot);
-            return randDouble(rng);
+            std::stringstream ss;
+            ss << guid;
+            return ss.str();
+         }
+
+         void GetBytes(std::vector<unsigned char>& bytes) const
+         {
+            bytes.clear();
+            std::copy(guid.begin(), guid.end(), bytes.begin());
          }
 
          int referenceCount;
-         Threading::Synchro syncRoot;
-
-         boost::mt19937 rng;
-         boost::uniform_int<> randInt;
-         boost::uniform_01<> randDouble;
+         boost::uuids::uuid guid;
       };
    }
 }
@@ -87,23 +87,32 @@ static boost::mutex& m(){
    return mtx;
 }
 #define LOCK lock_t l(m());
-#define PIMPL Private::Random* p(static_cast<Private::Random*>(this->p));
+#define PIMPL_REF(r) static_cast<Private::Guid*>((r).p)
+#define PIMPL Private::Guid* p(PIMPL_REF(*this));
 
-size_t Private::Random::ReferenceCount() const
+size_t Private::Guid::ReferenceCount() const
 {
    LOCK
    return referenceCount;
 }
 
-Random::Random()
-  : p(new Private::Random)
+Guid::Guid()
+  : p(new Private::Guid)
 {
    LOCK
    PIMPL
    p->referenceCount++;
 }
 
-Random::~Random()
+Guid::Guid(String string)
+  : p(new Private::Guid(string))
+{
+   LOCK
+   PIMPL
+   p->referenceCount++;
+}
+
+Guid::~Guid()
 {
    LOCK
    PIMPL
@@ -112,15 +121,7 @@ Random::~Random()
       delete p;
 }
 
-Random::Random(int min, int max)
-   : p(new Private::Random(min, max))
-{
-   LOCK
-   PIMPL
-   p->referenceCount++;
-}
-
-Random::Random(const Random& src)
+Guid::Guid(const Guid& src)
   : p(src.p)
 {
    LOCK
@@ -128,7 +129,7 @@ Random::Random(const Random& src)
    p->referenceCount++;
 }
 
-Random& Random::operator =(const Random& src)
+Guid& Guid::operator =(const Guid& src)
 {
    if(this==&src)
       return *this;
@@ -148,20 +149,40 @@ Random& Random::operator =(const Random& src)
    return *this;
 }
 
-size_t Random::HashCode() const
+size_t Guid::HashCode() const
 {
    PIMPL
    return (size_t)p;
 }
 
-int Random::Next() const
+std::string Guid::ToString() const
 {
    PIMPL
-   return p->Next();
+   return p->ToString();
 }
 
-double Random::NextDouble() const
+Guid Guid::Parse(String string)
+{
+   return Guid(string);
+}
+
+Guid Guid::New()
+{
+   Guid ret;
+   Private::Guid* p(PIMPL_REF(ret));
+   p->Random();
+   return ret;
+}
+
+Guid Guid::Empty()
+{
+   return Guid();
+}
+
+bool Guid::operator ==(const Guid comp) const
 {
    PIMPL
-   return p->NextDouble();
+   Private::Guid* c(PIMPL_REF(comp));
+   return p->guid==c->guid;
 }
+

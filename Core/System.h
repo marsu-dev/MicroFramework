@@ -32,6 +32,9 @@
 #include <System/CopyableRef.h>
 #include <System/HashCodeHandler.h>
 
+#include <System/Random.h>
+#include <System/Guid.h>
+
 #include <System/Console.h>
 #include <System/String.h>
 #include <System/NameValue.h>
