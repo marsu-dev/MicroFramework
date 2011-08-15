@@ -48,25 +48,21 @@ namespace System
 
          void Resize(size_t size)
          {
-            Threading::Locker lock(syncRoot);
             bytes.resize(size);
          }
 
          size_t Size() const
          {
-            Threading::Locker lock(syncRoot);
             return bytes.size();
          }
 
          void Import(const byte_array& bytes)
          {
-            Threading::Locker lock(syncRoot);
             this->bytes = bytes;
          }
 
          byte_array& ToArray()
          {
-            Threading::Locker lock(syncRoot);
             return bytes;
          }
 
@@ -79,6 +75,12 @@ namespace System
       {
          Private::Buffer& p(*reinterpret_cast<Private::Buffer*>(buffer.HashCode()));
          return p.bytes;
+      }
+
+      Threading::Synchro& BufferInternalLock(const System::Buffer& buffer)
+      {
+         Private::Buffer& p(*reinterpret_cast<Private::Buffer*>(buffer.HashCode()));
+         return p.syncRoot;
       }
    }
 }
@@ -160,23 +162,27 @@ size_t Buffer::HashCode() const
 void Buffer::Resize(size_t size)
 {
    PIMPL
+   Threading::Locker lock(p->syncRoot);
    p->Resize(size);
 }
 
 size_t Buffer::Size() const
 {
    PIMPL
+   Threading::Locker lock(p->syncRoot);
    return p->Size();
 }
 
 void Buffer::Import(const byte_array& bytes)
 {
    PIMPL
+   Threading::Locker lock(p->syncRoot);
    p->Import(bytes);
 }
 
 byte_array Buffer::ToArray() const
 {
    PIMPL
+   Threading::Locker lock(p->syncRoot);
    return p->ToArray();
 }
