@@ -26,37 +26,17 @@
 #pragma once
 
 #include <System/SimpleObject.h>
-#include <System/Type.h>
-#include <System/Exception.h>
-#include <System/Collections/Generic/List.h>
+#include <System/String.h>
 
 namespace System
 {
-   class Enum : public SimpleObject
+   namespace IO
    {
-   public:
-      Enum(){}
-      Enum(System::Type t, String value) : type(t), value(value) {}
+      class IOException : public Exception {};
+      class FileException : public IOException {};
 
-      bool operator==(const Enum& op) const
-      {
-         if(type!=op.type)
-            throw InvalidArgumentException();
-         // TODO: Enum comparison
-         return value==op.value;
-      }
-
-      std::string ToString() const
-      {
-         return value.ToString();
-      }
-
-      // TODO: Combine (e1, e2), operator |
-
-   private:
-      System::Type type;
-      String value;
-   };
-
-   typedef Collections::Generic::List<Enum> EnumCollection;
+      class FileOpenException : public FileException {};
+      class FileReadException : public FileException {};
+      class FileWriteException : public FileException {};
+   }
 }

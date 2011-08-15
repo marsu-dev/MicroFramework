@@ -26,6 +26,9 @@
 #pragma once
 
 #include <System/Object.h>
+#include <System/String.h>
+#include <System/Buffer.h>
+#include <System/IO/FileMode.h>
 
 namespace System
 {
@@ -40,6 +43,17 @@ namespace System
          FileStream& operator =(const FileStream& src);
 
          size_t HashCode() const;
+
+         void Open(String fileName, OpenMode mode);
+         void Close();
+         void Flush();
+
+         bool IsOpen() const;
+         bool CanRead() const;
+         bool CanWrite() const;
+
+         size_t Read(Buffer buffer, size_t offset, size_t count);
+         size_t Write(Buffer buffer, size_t offset, size_t count);
 
       private:
          Pimpl* p;

@@ -32,7 +32,7 @@ namespace System
 {
    namespace IO
    {
-      class OpenMode : public SimpleObject
+      class OpenMode : public Enum
       {
       public:
          static const Enum Read;
@@ -40,8 +40,6 @@ namespace System
          static const Enum ReadWrite;
 
          static EnumCollection All();
-
-      private:
       };
    }
 }

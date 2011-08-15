@@ -24,12 +24,22 @@
  */
 
 #include <System/IO/FileStream.h>
+#include <System/IO/Exception.h>
+#include <System/Threading/Synchro.h>
+
+#include <fstream>
 
 #include <boost/thread/mutex.hpp>
 typedef boost::lock_guard<boost::mutex> lock_t;
 
 namespace System
 {
+   namespace Private
+   {
+      byte_array& BufferInternalField(const System::Buffer& buffer);
+      Threading::Synchro& BufferInternalLock(const System::Buffer& buffer);
+   }
+
    namespace IO
    {
       namespace Private
@@ -43,7 +53,80 @@ namespace System
 
             size_t ReferenceCount() const;
 
+            void Open(const std::string& fileName, const OpenMode& openMode)
+            {
+               if(IsOpen())
+                  throw FileOpenException();
+               Threading::Locker lock(syncRoot);
+
+               this->openMode = openMode;
+
+               std::_Ios_Openmode mode(std::ios::binary);
+               if(openMode==OpenMode::Read) mode |= std::ios::in;
+               if(openMode==OpenMode::Write) mode |= std::ios::out;
+
+               fileStream.open(fileName.c_str(), mode);
+            }
+
+            void Close()
+            {
+               if(!IsOpen())
+                  return;
+
+               fileStream.close();
+            }
+
+            void Flush()
+            {
+               if(!IsOpen())
+                  return;
+
+               fileStream.flush();
+            }
+
+            bool IsOpen() const
+            {
+               return fileStream.is_open();
+            }
+
+            bool CanRead() const
+            {
+               return openMode==OpenMode::Read;
+            }
+
+            bool CanWrite() const
+            {
+               return openMode==OpenMode::Write;
+            }
+
+            size_t Read(Buffer buffer, size_t offset, size_t count)
+            {
+               if(!CanRead())
+                  throw FileReadException();
+
+               byte_array& bytes(System::Private::BufferInternalField(buffer));
+               if(offset+count>bytes.size())
+                  throw FileReadException();
+
+               fileStream.read((char*)&bytes[offset], count);
+            }
+
+            size_t Write(Buffer buffer, size_t offset, size_t count)
+            {
+               if(!CanWrite())
+                  throw FileWriteException();
+
+               byte_array& bytes(System::Private::BufferInternalField(buffer));
+               if(offset+count>bytes.size())
+                  throw FileReadException();
+
+               fileStream.write((char*)&bytes[offset], count);
+            }
+
             int referenceCount;
+            Threading::Synchro syncRoot;
+            OpenMode openMode;
+            std::fstream fileStream;
          };
       }
    }
@@ -113,4 +196,63 @@ size_t FileStream::HashCode() const
 {
    PIMPL
    return (size_t)p;
+}
+
+void FileStream::Open(String fileName, OpenMode openMode)
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   p->Open(fileName, openMode);
+}
+
+void FileStream::Close()
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   p->Close();
+}
+
+void FileStream::Flush()
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   p->Flush();
+}
+
+bool FileStream::IsOpen() const
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   return p->IsOpen();
+}
+
+bool FileStream::CanRead() const
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   return p->CanRead();
+}
+
+bool FileStream::CanWrite() const
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   return p->CanWrite();
+}
+
+size_t FileStream::Read(Buffer buffer, size_t offset, size_t count)
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   Threading::Locker lockBuffer(System::Private::BufferInternalLock(buffer));
+
+   return p->Read(buffer, offset, count);
+}
+
+size_t FileStream::Write(Buffer buffer, size_t offset, size_t count)
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   Threading::Locker lockBuffer(System::Private::BufferInternalLock(buffer));
+   return p->Write(buffer, offset, count);
 }
