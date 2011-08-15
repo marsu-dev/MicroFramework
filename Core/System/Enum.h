@@ -26,28 +26,31 @@
 #pragma once
 
 #include <System/SimpleObject.h>
-#include <System/String.h>
+#include <System/Exception.h>
 
 namespace System
 {
-   class Type : public SimpleObject
+   class Enum : public SimpleObject
    {
    public:
-      Type() {}
-      Type(String name) : name(name) {}
+      Enum(){}
+      Enum(Type type, String value) : type(type), value(value) {}
 
-      static Type& FromObject(const Object& object);
-      template<class T>
-      static Type& Get() { T t; return FromObject(t); }
+      bool opertor==(const Enum& op)
+      {
+         if(type!=op.type)
+            throw InvalidArgumentExceptionr();
+         // TODO: Enum comparison
+         return value==op.value;
+      }
 
-      bool operator==(const Type& type) const;
-      bool operator!=(const Type& type) const;
-
-      String Name() const { return name; }
-
-      std::string ToString() const;
+      std::string ToString() const
+      {
+         return value.ToString();
+      }
 
    private:
-      String name;
+      Type type;
+      String value;
    };
 }

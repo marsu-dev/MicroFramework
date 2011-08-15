@@ -48,4 +48,5 @@ namespace System
    class ObjectNotFoundException : public Exception {};
    class OutOfBoundException : public Exception {};
    class NotImplementedException : public Exception {};
+   class InvalidArgumentException : public Exception {};
 }

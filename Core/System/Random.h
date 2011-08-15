@@ -26,6 +26,7 @@
 #pragma once
 
 #include <System/Object.h>
+#include <System/Buffer.h>
 
 namespace System
 {
@@ -42,6 +43,8 @@ namespace System
 
       int Next() const;
       double NextDouble() const;
+      void NextBytes(Buffer buffer) const;
+      Buffer NextBytes(size_t size) const;
 
    private:
       Pimpl* p;

@@ -82,3 +82,18 @@ std::string Object::ToString() const
 
    return type.ToString();
 }
+
+static bool TypeEquals(const Type& op1, const Type& op2)
+{
+   return op1.Name()==op2.Name();
+}
+
+bool Type::operator==(const Type& type) const
+{
+   return TypeEquals(*this, type);
+}
+
+bool Type::operator!=(const Type& type) const
+{
+   return !TypeEquals(*this, type);
+}
