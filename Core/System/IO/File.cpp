@@ -24,6 +24,8 @@
  */
 
 #include <System/IO/File.h>
+#include <System/IO/Exception.h>
+#include <boost/filesystem.hpp>
 
 #include <boost/thread/mutex.hpp>
 typedef boost::lock_guard<boost::mutex> lock_t;
@@ -113,4 +115,18 @@ size_t File::HashCode() const
 {
    PIMPL
    return (size_t)p;
+}
+
+bool File::Exists(String fileName)
+{
+   const std::string& filename(fileName);
+   return boost::filesystem::exists(filename) && boost::filesystem::is_regular_file(filename);
+}
+
+int64_t File::Length(String fileName)
+{
+   if(!File::Exists(fileName))
+      throw FileException();
+   const std::string& filename(fileName);
+   return (int64_t)boost::filesystem::file_size(filename);
 }

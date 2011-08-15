@@ -49,11 +49,15 @@ namespace System
          void Flush();
 
          bool IsOpen() const;
+         int64_t Length() const;
          bool CanRead() const;
          bool CanWrite() const;
 
          size_t Read(Buffer buffer, size_t offset, size_t count);
          size_t Write(Buffer buffer, size_t offset, size_t count);
+
+         void SeekRead(int64_t position);
+         void SeekWrite(int64_t position);
 
       private:
          Pimpl* p;

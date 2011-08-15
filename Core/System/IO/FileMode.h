@@ -39,6 +39,8 @@ namespace System
          static const Enum Write;
          static const Enum ReadWrite;
 
+         // TODO: Append, Create...
+
          static EnumCollection All();
       };
    }
