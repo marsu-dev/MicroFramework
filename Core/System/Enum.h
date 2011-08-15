@@ -38,7 +38,7 @@ namespace System
       Enum(){}
       Enum(System::Type t, String value) : type(t), value(value) {}
 
-      bool operator==(const Enum& op)
+      bool operator==(const Enum& op) const
       {
          if(type!=op.type)
             throw InvalidArgumentException();
