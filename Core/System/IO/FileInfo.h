@@ -25,29 +25,24 @@
 
 #pragma once
 
-#include <System/SimpleObject.h>
-#include <System/String.h>
+#include <System/Object.h>
 
 namespace System
 {
-   class Type : public SimpleObject
+   namespace IO
    {
-   public:
-      Type() {}
-      Type(String name) : name(name) {}
+      class FileInfo : public Object
+      {
+      public:
+         FileInfo();
+         virtual ~FileInfo();
+         FileInfo(const FileInfo& src);
+         FileInfo& operator =(const FileInfo& src);
 
-      static Type& FromObject(const Object& object);
-      template<class T>
-      static Type& Get() { T t; return FromObject(t); }
+         size_t HashCode() const;
 
-      bool operator==(const Type& type) const;
-      bool operator!=(const Type& type) const;
-
-      String Name() const { return name; }
-
-      std::string ToString() const;
-
-   private:
-      String name;
-   };
+      private:
+         Pimpl* p;
+      };
+   }
 }

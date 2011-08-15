@@ -23,31 +23,26 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+#include <System/IO/FileMode.h>
 
-#include <System/SimpleObject.h>
-#include <System/String.h>
+using namespace System;
+using namespace System::IO;
 
-namespace System
+const Enum OpenMode::Read(Type::Get<OpenMode>(), String("Read"));
+const Enum OpenMode::Write(Type::Get<OpenMode>(), String("Write"));
+const Enum OpenMode::ReadWrite(Type::Get<OpenMode>(), String("ReadWrite"));
+
+EnumCollection OpenMode::All()
 {
-   class Type : public SimpleObject
-   {
-   public:
-      Type() {}
-      Type(String name) : name(name) {}
-
-      static Type& FromObject(const Object& object);
-      template<class T>
-      static Type& Get() { T t; return FromObject(t); }
-
-      bool operator==(const Type& type) const;
-      bool operator!=(const Type& type) const;
-
-      String Name() const { return name; }
-
-      std::string ToString() const;
-
-   private:
-      String name;
+   static const Enum enums[] = {
+      Read,
+      Write,
+      ReadWrite
    };
+
+   EnumCollection ret;
+   for(size_t i=0; i<sizeof(enums)/sizeof(enums[0]); i++)
+      ret.Add(enums[i]);
+
+   return ret;
 }

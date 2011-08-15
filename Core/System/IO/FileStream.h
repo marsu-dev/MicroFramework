@@ -25,29 +25,38 @@
 
 #pragma once
 
-#include <System/SimpleObject.h>
+#include <System/Object.h>
 #include <System/String.h>
+#include <System/Buffer.h>
+#include <System/IO/FileMode.h>
 
 namespace System
 {
-   class Type : public SimpleObject
+   namespace IO
    {
-   public:
-      Type() {}
-      Type(String name) : name(name) {}
+      class FileStream : public Object
+      {
+      public:
+         FileStream();
+         virtual ~FileStream();
+         FileStream(const FileStream& src);
+         FileStream& operator =(const FileStream& src);
 
-      static Type& FromObject(const Object& object);
-      template<class T>
-      static Type& Get() { T t; return FromObject(t); }
+         size_t HashCode() const;
 
-      bool operator==(const Type& type) const;
-      bool operator!=(const Type& type) const;
+         void Open(String fileName, OpenMode mode);
+         void Close();
+         void Flush();
 
-      String Name() const { return name; }
+         bool IsOpen() const;
+         bool CanRead() const;
+         bool CanWrite() const;
 
-      std::string ToString() const;
+         size_t Read(Buffer buffer, size_t offset, size_t count);
+         size_t Write(Buffer buffer, size_t offset, size_t count);
 
-   private:
-      String name;
-   };
+      private:
+         Pimpl* p;
+      };
+   }
 }

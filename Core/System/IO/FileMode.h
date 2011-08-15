@@ -26,28 +26,20 @@
 #pragma once
 
 #include <System/SimpleObject.h>
-#include <System/String.h>
+#include <System/Enum.h>
 
 namespace System
 {
-   class Type : public SimpleObject
+   namespace IO
    {
-   public:
-      Type() {}
-      Type(String name) : name(name) {}
+      class OpenMode : public Enum
+      {
+      public:
+         static const Enum Read;
+         static const Enum Write;
+         static const Enum ReadWrite;
 
-      static Type& FromObject(const Object& object);
-      template<class T>
-      static Type& Get() { T t; return FromObject(t); }
-
-      bool operator==(const Type& type) const;
-      bool operator!=(const Type& type) const;
-
-      String Name() const { return name; }
-
-      std::string ToString() const;
-
-   private:
-      String name;
-   };
+         static EnumCollection All();
+      };
+   }
 }

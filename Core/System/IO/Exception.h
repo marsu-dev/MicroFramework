@@ -30,24 +30,13 @@
 
 namespace System
 {
-   class Type : public SimpleObject
+   namespace IO
    {
-   public:
-      Type() {}
-      Type(String name) : name(name) {}
+      class IOException : public Exception {};
+      class FileException : public IOException {};
 
-      static Type& FromObject(const Object& object);
-      template<class T>
-      static Type& Get() { T t; return FromObject(t); }
-
-      bool operator==(const Type& type) const;
-      bool operator!=(const Type& type) const;
-
-      String Name() const { return name; }
-
-      std::string ToString() const;
-
-   private:
-      String name;
-   };
+      class FileOpenException : public FileException {};
+      class FileReadException : public FileException {};
+      class FileWriteException : public FileException {};
+   }
 }
