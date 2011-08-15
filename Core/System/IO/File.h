@@ -26,6 +26,7 @@
 #pragma once
 
 #include <System/Object.h>
+#include <System/String.h>
 
 namespace System
 {
@@ -40,6 +41,9 @@ namespace System
          File& operator =(const File& src);
 
          size_t HashCode() const;
+
+         static bool Exists(String fileName);
+         static int64_t Length(String fileName);
 
       private:
          Pimpl* p;

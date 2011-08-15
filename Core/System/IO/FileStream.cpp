@@ -25,6 +25,7 @@
 
 #include <System/IO/FileStream.h>
 #include <System/IO/Exception.h>
+#include <System/IO/File.h>
 #include <System/Threading/Synchro.h>
 
 #include <fstream>
@@ -49,6 +50,7 @@ namespace System
          public:
             FileStream()
                : referenceCount(0)
+               , length(0)
             {}
 
             size_t ReferenceCount() const;
@@ -57,10 +59,17 @@ namespace System
             {
                if(IsOpen())
                   throw FileOpenException();
+
+               if(!File::Exists(String(fileName)) && (openMode==OpenMode::Read))
+                  throw FileOpenException();
+               if(File::Exists(String(fileName)) && (openMode==OpenMode::Write))
+                  throw FileOpenException();
+
                Threading::Locker lock(syncRoot);
 
-               this->openMode = openMode;
+               length = File::Length(String(fileName));
 
+               this->openMode = openMode;
                std::_Ios_Openmode mode(std::ios::binary);
                if(openMode==OpenMode::Read) mode |= std::ios::in;
                if(openMode==OpenMode::Write) mode |= std::ios::out;
@@ -89,14 +98,19 @@ namespace System
                return fileStream.is_open();
             }
 
+            size_t Length() const
+            {
+               return length;
+            }
+
             bool CanRead() const
             {
-               return openMode==OpenMode::Read;
+               return IsOpen() && openMode==OpenMode::Read;
             }
 
             bool CanWrite() const
             {
-               return openMode==OpenMode::Write;
+               return IsOpen() && openMode==OpenMode::Write;
             }
 
             size_t Read(Buffer buffer, size_t offset, size_t count)
@@ -109,6 +123,7 @@ namespace System
                   throw FileReadException();
 
                fileStream.read((char*)&bytes[offset], count);
+               return (size_t)fileStream.gcount();
             }
 
             size_t Write(Buffer buffer, size_t offset, size_t count)
@@ -120,13 +135,36 @@ namespace System
                if(offset+count>bytes.size())
                   throw FileReadException();
 
+               const std::ios::streampos start(fileStream.tellp());
                fileStream.write((char*)&bytes[offset], count);
+               return fileStream.tellp()-start;
+            }
+
+            void SeekRead(int64_t position)
+            {
+               if(!CanRead())
+                  throw FileReadException();
+
+               fileStream.seekg(position);
+               if(!fileStream.good())
+                  throw FileReadException();
+            }
+
+            void SeekWrite(int64_t position)
+            {
+               if(!CanWrite())
+                  throw FileWriteException();
+
+               fileStream.seekp(position);
+               if(!fileStream.good())
+                  throw FileWriteException();
             }
 
             int referenceCount;
             Threading::Synchro syncRoot;
             OpenMode openMode;
             std::fstream fileStream;
+            int64_t length;
          };
       }
    }
@@ -226,6 +264,13 @@ bool FileStream::IsOpen() const
    return p->IsOpen();
 }
 
+int64_t FileStream::Length() const
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+   return p->Length();
+}
+
 bool FileStream::CanRead() const
 {
    PIMPL
@@ -246,7 +291,12 @@ size_t FileStream::Read(Buffer buffer, size_t offset, size_t count)
    Threading::Locker lock(p->syncRoot);
    Threading::Locker lockBuffer(System::Private::BufferInternalLock(buffer));
 
-   return p->Read(buffer, offset, count);
+   try{
+      return p->Read(buffer, offset, count);
+   }
+   catch(std::exception&){
+      throw IOException();
+   }
 }
 
 size_t FileStream::Write(Buffer buffer, size_t offset, size_t count)
@@ -254,5 +304,37 @@ size_t FileStream::Write(Buffer buffer, size_t offset, size_t count)
    PIMPL
    Threading::Locker lock(p->syncRoot);
    Threading::Locker lockBuffer(System::Private::BufferInternalLock(buffer));
-   return p->Write(buffer, offset, count);
+
+   try{
+      return p->Write(buffer, offset, count);
+   }
+   catch(std::exception&){
+      throw IOException();
+   }
+}
+
+void FileStream::SeekRead(int64_t position)
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+
+   try{
+      return p->SeekRead(position);
+   }
+   catch(std::exception&){
+      throw IOException();
+   }
+}
+
+void FileStream::SeekWrite(int64_t position)
+{
+   PIMPL
+   Threading::Locker lock(p->syncRoot);
+
+   try{
+      return p->SeekWrite(position);
+   }
+   catch(std::exception&){
+      throw IOException();
+   }
 }

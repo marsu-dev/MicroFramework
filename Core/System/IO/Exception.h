@@ -26,7 +26,7 @@
 #pragma once
 
 #include <System/SimpleObject.h>
-#include <System/String.h>
+#include <System/Exception.h>
 
 namespace System
 {
