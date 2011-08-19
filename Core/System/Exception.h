@@ -42,8 +42,9 @@ namespace System
       String message;
    };
 
+   class SystemException : public Exception {};
+
    class NullPointerException : public Exception {};
-   class FileNotFoundException : public Exception {};
    class ObjectPresentException : public Exception {};
    class ObjectNotFoundException : public Exception {};
    class OutOfBoundException : public Exception {};

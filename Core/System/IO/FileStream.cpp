@@ -55,24 +55,24 @@ namespace System
 
             size_t ReferenceCount() const;
 
-            void Open(const std::string& fileName, const OpenMode& openMode)
+            void Open(const std::string& fileName, FileMode fileMode, FileAccess fileAccess)
             {
                if(IsOpen())
-                  throw FileOpenException();
+                  throw IOException();
 
-               if(!File::Exists(String(fileName)) && (openMode==OpenMode::Read))
-                  throw FileOpenException();
-               if(File::Exists(String(fileName)) && (openMode==OpenMode::Write))
-                  throw FileOpenException();
+               if(!File::Exists(String(fileName)) && (fileAccess==FileAccess::Read))
+                  throw IOException();
+               if(File::Exists(String(fileName)) && (fileAccess==FileAccess::Write))
+                  throw IOException();
 
                Threading::Locker lock(syncRoot);
 
                length = File::Length(String(fileName));
 
-               this->openMode = openMode;
+               this->fileAccess = fileAccess;
                std::_Ios_Openmode mode(std::ios::binary);
-               if(openMode==OpenMode::Read) mode |= std::ios::in;
-               if(openMode==OpenMode::Write) mode |= std::ios::out;
+               if(fileAccess==FileAccess::Read) mode |= std::ios::in;
+               if(fileAccess==FileAccess::Write) mode |= std::ios::out;
 
                fileStream.open(fileName.c_str(), mode);
             }
@@ -105,22 +105,22 @@ namespace System
 
             bool CanRead() const
             {
-               return IsOpen() && openMode==OpenMode::Read;
+               return IsOpen() && fileAccess==FileAccess::Read;
             }
 
             bool CanWrite() const
             {
-               return IsOpen() && openMode==OpenMode::Write;
+               return IsOpen() && fileAccess==FileAccess::Write;
             }
 
             size_t Read(Buffer buffer, size_t offset, size_t count)
             {
                if(!CanRead())
-                  throw FileReadException();
+                  throw IOException();
 
                byte_array& bytes(System::Private::BufferInternalField(buffer));
                if(offset+count>bytes.size())
-                  throw FileReadException();
+                  throw IOException();
 
                fileStream.read((char*)&bytes[offset], count);
                return (size_t)fileStream.gcount();
@@ -129,11 +129,11 @@ namespace System
             size_t Write(Buffer buffer, size_t offset, size_t count)
             {
                if(!CanWrite())
-                  throw FileWriteException();
+                  throw IOException();
 
                byte_array& bytes(System::Private::BufferInternalField(buffer));
                if(offset+count>bytes.size())
-                  throw FileReadException();
+                  throw IOException();
 
                const std::ios::streampos start(fileStream.tellp());
                fileStream.write((char*)&bytes[offset], count);
@@ -143,26 +143,26 @@ namespace System
             void SeekRead(int64_t position)
             {
                if(!CanRead())
-                  throw FileReadException();
+                  throw IOException();
 
                fileStream.seekg(position);
                if(!fileStream.good())
-                  throw FileReadException();
+                  throw IOException();
             }
 
             void SeekWrite(int64_t position)
             {
                if(!CanWrite())
-                  throw FileWriteException();
+                  throw IOException();
 
                fileStream.seekp(position);
                if(!fileStream.good())
-                  throw FileWriteException();
+                  throw IOException();
             }
 
             int referenceCount;
             Threading::Synchro syncRoot;
-            OpenMode openMode;
+            FileAccess fileAccess;
             std::fstream fileStream;
             int64_t length;
          };
@@ -236,11 +236,16 @@ size_t FileStream::HashCode() const
    return (size_t)p;
 }
 
-void FileStream::Open(String fileName, OpenMode openMode)
+void FileStream::Open(String fileName, FileMode fileMode)
+{
+   Open(fileName, fileMode, FileAccess::ReadWrite);
+}
+
+void FileStream::Open(String fileName, FileMode fileMode, FileAccess fileAccess)
 {
    PIMPL
    Threading::Locker lock(p->syncRoot);
-   p->Open(fileName, openMode);
+   p->Open((std::string)fileName, fileMode, fileAccess);
 }
 
 void FileStream::Close()

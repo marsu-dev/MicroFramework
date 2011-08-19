@@ -44,7 +44,8 @@ namespace System
 
          size_t HashCode() const;
 
-         void Open(String fileName, OpenMode mode);
+         void Open(String fileName, FileMode fileMode);
+         void Open(String fileName, FileMode fileMode, FileAccess fileAccess);
          void Close();
          void Flush();
 

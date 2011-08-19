@@ -28,11 +28,36 @@
 using namespace System;
 using namespace System::IO;
 
-const Enum OpenMode::Read(Type::Get<OpenMode>(), String("Read"));
-const Enum OpenMode::Write(Type::Get<OpenMode>(), String("Write"));
-const Enum OpenMode::ReadWrite(Type::Get<OpenMode>(), String("ReadWrite"));
+const Enum FileMode::CreateNew(Type::Get<FileMode>(), String("CreateNew"));
+const Enum FileMode::Create(Type::Get<FileMode>(), String("Create"));
+const Enum FileMode::Open(Type::Get<FileMode>(), String("Open"));
+const Enum FileMode::OpenOrCreate(Type::Get<FileMode>(), String("OpenOrCreate"));
+const Enum FileMode::Truncate(Type::Get<FileMode>(), String("Truncate"));
+const Enum FileMode::Append(Type::Get<FileMode>(), String("Append"));
 
-EnumCollection OpenMode::All()
+EnumCollection FileMode::All()
+{
+   static const Enum enums[] = {
+      CreateNew,
+      Create,
+      Open,
+      OpenOrCreate,
+      Truncate,
+      Append
+   };
+
+   EnumCollection ret;
+   for(size_t i=0; i<sizeof(enums)/sizeof(enums[0]); i++)
+      ret.Add(enums[i]);
+   
+   return ret;
+}
+
+const Enum FileAccess::Read(Type::Get<FileAccess>(), String("Read"));
+const Enum FileAccess::Write(Type::Get<FileAccess>(), String("Write"));
+const Enum FileAccess::ReadWrite(Type::Get<FileAccess>(), String("ReadWrite"));
+
+EnumCollection FileAccess::All()
 {
    static const Enum enums[] = {
       Read,
@@ -43,6 +68,6 @@ EnumCollection OpenMode::All()
    EnumCollection ret;
    for(size_t i=0; i<sizeof(enums)/sizeof(enums[0]); i++)
       ret.Add(enums[i]);
-
+   
    return ret;
 }

@@ -126,7 +126,7 @@ bool File::Exists(String fileName)
 int64_t File::Length(String fileName)
 {
    if(!File::Exists(fileName))
-      throw FileException();
+      throw IO::FileNotFoundException();
    const std::string& filename(fileName);
    return (int64_t)boost::filesystem::file_size(filename);
 }

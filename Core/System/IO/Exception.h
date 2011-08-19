@@ -32,11 +32,13 @@ namespace System
 {
    namespace IO
    {
-      class IOException : public Exception {};
-      class FileException : public IOException {};
+      class IOException : public SystemException {};
 
-      class FileOpenException : public FileException {};
-      class FileReadException : public FileException {};
-      class FileWriteException : public FileException {};
+      class DirectoryNotFoundException : public IOException {};
+      class DriveNotFoundException : public IOException {};
+      class EndOfStreamException : public IOException {};
+      class FileLoadException : public IOException {};
+      class FileNotFoundException : public IOException {};
+      class PathTooLongException : public IOException {};
    }
 }

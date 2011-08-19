@@ -32,14 +32,31 @@ namespace System
 {
    namespace IO
    {
-      class OpenMode : public Enum
+      class FileMode : public Enum
       {
       public:
+         FileMode() {}
+         FileMode(Enum e) : Enum(e) {}
+
+         static const Enum CreateNew;
+         static const Enum Create;
+         static const Enum Open;
+         static const Enum OpenOrCreate;
+         static const Enum Truncate;
+         static const Enum Append;
+
+         static EnumCollection All();
+      };
+
+      class FileAccess : public Enum
+      {
+      public:
+         FileAccess() {}
+         FileAccess(Enum e) : Enum(e) {}
+
          static const Enum Read;
          static const Enum Write;
          static const Enum ReadWrite;
-
-         // TODO: Append, Create...
 
          static EnumCollection All();
       };

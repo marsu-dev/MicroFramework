@@ -24,7 +24,7 @@
  */
 
 #include <System/Xml/XmlDocument.h>
-#include <System/Exception.h>
+#include <System/IO/Exception.h>
 #include <istream>
 #include <fstream>
 #include <sstream>
@@ -54,7 +54,7 @@ namespace System
                std::ifstream stream;
                stream.open(xmlFile.c_str(), std::ios::in);
                if(!stream.is_open())
-                  throw FileNotFoundException();
+                  throw IO::FileNotFoundException();
                Load(stream);
             }
 
