@@ -62,5 +62,5 @@ namespace System
       Pimpl* p;
    };
 
-   static String operator +(String left, String right);
+String operator +(String left, String right);
 }

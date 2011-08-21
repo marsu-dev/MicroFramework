@@ -73,7 +73,6 @@ namespace System
                      if(Contains(object))
                         throw Exception();
 
-                     const Object& obj(object);
                      objectMap.insert(std::make_pair(object.HashCode(), object));
                   }
 
