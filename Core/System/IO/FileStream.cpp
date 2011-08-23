@@ -70,7 +70,7 @@ namespace System
                length = File::Length(String(fileName));
 
                this->openMode = openMode;
-               int mode(std::ios::binary);
+               std::ios_base::openmode mode(std::ios_base::binary);
                if(openMode==OpenMode::Read) mode |= std::ios::in;
                if(openMode==OpenMode::Write) mode |= std::ios::out;
 
