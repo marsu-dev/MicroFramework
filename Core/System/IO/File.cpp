@@ -51,6 +51,7 @@ namespace System
    }
 }
 
+using namespace System;
 using namespace System::IO;
 
 static boost::mutex& m(){

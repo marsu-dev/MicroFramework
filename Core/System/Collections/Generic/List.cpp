@@ -52,7 +52,7 @@ namespace System
 
                   size_t ReferenceCount() const;
 
-                  size_t Empty() const
+                  bool Empty() const
                   {
                      return objects.empty();
                   }
@@ -135,6 +135,7 @@ namespace System
    }
 }
 
+using namespace System;
 using namespace System::Collections::Generic::Detail;
 
 static boost::mutex& m(){

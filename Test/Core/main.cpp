@@ -262,7 +262,7 @@ static int ThreadTest()
    std::cerr << std::endl;
 
    System::Collections::Generic::Stack<MyWorker> workerStack;
-   for(int i=0; i<(1<<16); i++)
+   for(int i=0; i<(1<<6); i++)
    {
       workerStack.Push(MyWorker());
    }
@@ -271,7 +271,7 @@ static int ThreadTest()
 
    std::cout << "Queue Test" << std::endl;
    System::Collections::Generic::Queue<MyWorker> workerQueue;
-   for(int i=0; i<(1<<10); i++)
+   for(int i=0; i<(1<<6); i++)
    {
       workerQueue.Enqueue(MyWorker());
    }
@@ -280,7 +280,7 @@ static int ThreadTest()
 
    std::cout << "PriorityQueue Test" << std::endl;
    System::Collections::Generic::PriorityQueue<String> priorityQueue;
-   for(int i=0; i<10; i++)
+   for(int i=0; i<6; i++)
    {
       String str;
       {
@@ -297,7 +297,7 @@ static int ThreadTest()
    }
 
    System::Collections::Generic::Set<MyWorker> workerSet;
-   for(int i=0; i<(1<<16); i++)
+   for(int i=0; i<(1<<6); i++)
    {
       workerSet.Add(MyWorker());
    }
@@ -305,7 +305,7 @@ static int ThreadTest()
    workerSet.Clear();
 
    System::Collections::Generic::Dictionary<String, MyWorker> workerDic;
-   for(int i=0; i<(1<<16); i++)
+   for(int i=0; i<(1<<6); i++)
    {
       String str;
       {

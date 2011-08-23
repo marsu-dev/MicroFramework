@@ -70,7 +70,7 @@ namespace System
                length = File::Length(String(fileName));
 
                this->openMode = openMode;
-               std::_Ios_Openmode mode(std::ios::binary);
+               int mode(std::ios::binary);
                if(openMode==OpenMode::Read) mode |= std::ios::in;
                if(openMode==OpenMode::Write) mode |= std::ios::out;
 
@@ -100,7 +100,7 @@ namespace System
 
             size_t Length() const
             {
-               return length;
+               return (size_t)length;
             }
 
             bool CanRead() const
@@ -137,7 +137,7 @@ namespace System
 
                const std::ios::streampos start(fileStream.tellp());
                fileStream.write((char*)&bytes[offset], count);
-               return fileStream.tellp()-start;
+               return (size_t)(fileStream.tellp()-start);
             }
 
             void SeekRead(int64_t position)
@@ -170,6 +170,7 @@ namespace System
    }
 }
 
+using namespace System;
 using namespace System::IO;
 
 static boost::mutex& m(){
@@ -179,7 +180,7 @@ static boost::mutex& m(){
 #define LOCK lock_t l(m());
 #define PIMPL Private::FileStream* p(static_cast<Private::FileStream*>(this->p));
 
-size_t Private::FileStream::ReferenceCount() const
+size_t System::IO::Private::FileStream::ReferenceCount() const
 {
    LOCK
    return referenceCount;
