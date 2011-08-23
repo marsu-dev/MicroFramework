@@ -137,7 +137,7 @@ namespace System
                list.ForEach(func);
             }
 
-            void ForEach(ListDelegate<T> delegate)
+            void ForEach(ListDelegate<T>& delegate)
             {
                list.ForEach(delegate);
             }

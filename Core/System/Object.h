@@ -26,6 +26,7 @@
 #pragma once
 
 #include <cstddef>
+#include <stdint.h>
 #include <string>
 
 namespace System
