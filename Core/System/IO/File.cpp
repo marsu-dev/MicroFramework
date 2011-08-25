@@ -124,10 +124,10 @@ bool File::Exists(String fileName)
    return boost::filesystem::exists(filename) && boost::filesystem::is_regular_file(filename);
 }
 
-Int64 File::Length(String fileName)
+System::Int64 File::Length(String fileName)
 {
    if(!File::Exists(fileName))
       throw FileException();
    const std::string& filename(fileName);
-   return (Int64)boost::filesystem::file_size(filename);
+   return (System::Int64)boost::filesystem::file_size(filename);
 }
