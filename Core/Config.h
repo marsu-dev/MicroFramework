@@ -28,6 +28,9 @@
 #include <cstddef>
 #include <boost/cstdint.hpp>
 
-typedef boost::int64_t Int64;
-
 #include <string>
+
+namespace System
+{
+   typedef boost::int64_t Int64;
+}
