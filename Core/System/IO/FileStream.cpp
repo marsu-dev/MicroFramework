@@ -140,7 +140,7 @@ namespace System
                return (size_t)(fileStream.tellp()-start);
             }
 
-            void SeekRead(int64_t position)
+            void SeekRead(System::Int64 position)
             {
                if(!CanRead())
                   throw FileReadException();
@@ -150,7 +150,7 @@ namespace System
                   throw FileReadException();
             }
 
-            void SeekWrite(int64_t position)
+            void SeekWrite(System::Int64 position)
             {
                if(!CanWrite())
                   throw FileWriteException();
@@ -164,7 +164,7 @@ namespace System
             Threading::Synchro syncRoot;
             OpenMode openMode;
             std::fstream fileStream;
-            int64_t length;
+            System::Int64 length;
          };
       }
    }
@@ -265,7 +265,7 @@ bool FileStream::IsOpen() const
    return p->IsOpen();
 }
 
-int64_t FileStream::Length() const
+System::Int64 FileStream::Length() const
 {
    PIMPL
    Threading::Locker lock(p->syncRoot);
@@ -314,7 +314,7 @@ size_t FileStream::Write(Buffer buffer, size_t offset, size_t count)
    }
 }
 
-void FileStream::SeekRead(int64_t position)
+void FileStream::SeekRead(System::Int64 position)
 {
    PIMPL
    Threading::Locker lock(p->syncRoot);
@@ -327,7 +327,7 @@ void FileStream::SeekRead(int64_t position)
    }
 }
 
-void FileStream::SeekWrite(int64_t position)
+void FileStream::SeekWrite(System::Int64 position)
 {
    PIMPL
    Threading::Locker lock(p->syncRoot);

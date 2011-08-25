@@ -43,7 +43,7 @@ namespace System
          size_t HashCode() const;
 
          static bool Exists(System::String fileName);
-         static int64_t Length(System::String fileName);
+         static System::Int64 Length(System::String fileName);
 
       private:
          Pimpl* p;
