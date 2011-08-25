@@ -25,26 +25,9 @@
 
 #pragma once
 
-#include <Config.h>
+#include <cstddef>
+#include <boost/cstdint.hpp>
 
-namespace System
-{
-   class Type;
+typedef boost::int64_t Int64;
 
-   class Object
-   {
-   public:
-      virtual ~Object() {};
-
-      virtual size_t HashCode() const = 0;
-      virtual System::Type& Type() const;
-      virtual std::string ToString() const;
-   };
-
-   class Pimpl
-   {
-   public:
-      virtual ~Pimpl() {};
-      virtual size_t ReferenceCount() const = 0;
-   };
-}
+#include <string>
